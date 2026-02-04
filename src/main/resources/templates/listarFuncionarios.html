@@ -1,0 +1,183 @@
+<!
+<html lang="pt-br" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Gestão de Funcionarios</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif;
+        }
+
+        /* BODY */
+        body {
+            background-color: #ffffff;
+            padding: 40px;
+        }
+
+        /* TÍTULO */
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #1f2937;
+        }
+
+        /* BOTÃO ADICIONAR FUNCIONARIO */
+        .btn-adicionar {
+            display: inline-block;
+            text-decoration: none;
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 15px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+        }
+
+        .btn-adicionar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3);
+            filter: brightness(1.1);
+        }
+
+        /* TABELA */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #ffffff;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+            table-layout: auto; /* Garante ajuste automático das larguras */
+        }
+
+        /* CABEÇALHO - Ajustado para alinhar com os dados */
+        thead {
+            background: linear-gradient(90deg, #4f46e5, #3b82f6);
+        }
+
+        thead th {
+            color: #ffffff;
+            padding: 16px;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            text-align: left; /* ALINHAMENTO CORRIGIDO */
+        }
+
+        /* CORPO */
+        tbody td {
+            padding: 15px;
+            border-bottom: 1px solid #e5e7eb;
+            color: #374151;
+            vertical-align: middle; /* Centraliza o conteúdo verticalmente */
+        }
+
+        /* LINHAS ALTERNADAS E HOVER */
+        tbody tr:nth-child(even) { background-color: #f9fafb; }
+        tbody tr:hover { background-color: #eef2ff; }
+
+        /* IMAGEM */
+        table img {
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #e0e7ff;
+            display: block;
+        }
+
+        /* COLUNA DE AÇÕES - CORRIGIDA */
+        td:last-child {
+            text-align: left;
+            white-space: nowrap; /* Impede que os botões quebrem linha */
+            width: 1%;           /* Faz a coluna ocupar o mínimo espaço necessário */
+        }
+
+        /* BOTÕES DE AÇÃO */
+        td a {
+            display: inline-block; /* Mudado de flex para inline-block para manter alinhamento */
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 999px;
+            font-size: 13px;
+            font-weight: 600;
+            transition: 0.3s ease;
+            color: #ffffff;
+            margin-right: 5px; /* Espaçamento entre botões */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+        }
+
+        /* CORES DOS BOTÕES */
+        td a:nth-child(1) { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        td a:nth-child(2) { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        td a:nth-child(3) { background: linear-gradient(135deg, #ef4444, #dc2626); margin-right: 0; }
+
+        td a:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.1);
+        }
+    </style>
+
+</head>
+<body>
+<h1>Gestão de Funcionários</h1>
+
+<div th:if="${mensagem}" class="mensagem"
+     style="padding: 15px; background-color: #dcfce7; color: #166534; border-radius: 8px; margin-bottom: 20px; text-align: center; border: 1px solid #bbf7d0;">
+    <span th:text="${mensagem}"></span>
+</div>
+
+<a class="btn-adicionar" th:href="@{/funcionarios/ui/adicionar}">Novo Funcionário</a>
+
+<table>
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Imagem</th>
+        <th>Nome</th>
+        <th>Data de Nascimento</th>
+        <th>CPF</th>
+        <th>Telefone</th>
+        <th>Email</th>
+        <th>Salário</th>
+        <th>Cargo</th>
+        <th>Ações</th>
+    </tr>
+
+    </thead>
+    <tbody>
+    <tr th:each="funcionario : ${funcionarios}">
+        <td th:text="${funcionario.id}"></td>
+        <td><img th:src="${funcionario.imgUrl}" width="100" height="100" style="border-radius: 50%"></td>
+        <td th:text="${funcionario.nome}"></td>
+        <td th:text="${#temporals.format(funcionario.dataNascimento, 'dd/MM/yyyy')}"></td>
+        <td th:text="${funcionario.cpf}"></td>
+        <td th:text="${funcionario.telefone}"></td>
+        <td th:text="${funcionario.email}"></td>
+        <td th:text="${#numbers.formatCurrency(funcionario.salario)}"></td>
+        <td th:text="${funcionario.cargo.descricao}"></td>
+        <td>
+            <div style="display: flex; gap: 8px; align-items: center;">
+                <a th:href="@{/funcionarios/ui/listar/{id}(id=${funcionario.id})}"
+                   style="margin-right: 0;">Detalhes</a>
+
+                <a th:href="@{/funcionarios/ui/atualizar/{id}(id=${funcionario.id})}"
+                   style="margin-right: 0;">Alterar</a>
+
+                <a th:href="@{/funcionarios/ui/demitir/{id}(id=${funcionario.id})}"
+                   style="margin-right: 0;"
+                   onclick="return confirm('Tem certeza que deseja demitir este funcionário?')">Demitir</a>
+            </div>
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>

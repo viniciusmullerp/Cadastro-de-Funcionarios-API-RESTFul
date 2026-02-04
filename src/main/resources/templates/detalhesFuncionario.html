@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Detalhes do Funcionario</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
+
+        img {
+            border-radius: 50%;
+            display: block;
+            margin: 0 auto 20px;
+            width: 100px;
+            height:100px;
+            object-fit: cover;
+        }
+
+        p {
+            font-size: 16px;
+            color: #555;
+            border-bottom: 1px solid #eee;
+            padding: 8px 0;
+        }
+
+        /* Classe para centralizar o botão */
+        .container-botao {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        a {
+            display: inline-block;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: white;
+            background-color: #4f46e5;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        a:hover {
+            background-color: #4338ca;
+        }
+    </style>
+</head>
+<body>
+<h1>Detalhes do Funcionário</h1>
+
+<div class="card">
+    <img th:src="${funcionario.imgUrl}" alt="${funcionario.nome}" />
+    <h2 style="text-align: center;" th:text="${funcionario.nome}"></h2>
+
+    <p><strong>Email:</strong> <span th:text="${funcionario.email}"></span></p>
+    <p><strong>Telefone:</strong> <span th:text="${funcionario.telefone}"></span></p>
+    <p><strong>Data de Nascimento:</strong> <span th:text="${#temporals.format(funcionario.dataNascimento, 'dd/MM/yyyy')}"></span></p>
+    <p><strong>CPF:</strong> <span th:text="${funcionario.cpf}"></span></p>
+    <p><strong>Salário:</strong> <span th:text="${#numbers.formatCurrency(funcionario.salario)}"></span></p>
+    <p><strong>Cargo:</strong> <span th:text="${funcionario.cargo.descricao}"></span></p>
+</div>
+
+<div class="container-botao">
+    <a href="/funcionarios/ui/listar">Voltar para a lista de funcionários</a>
+</div>
+
+</body>
+</html>
